@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Expense | SpendWise{% endblock %}
+
+{% block content %}
+<div class="app-card auth-card">
+    <h2 class="fw-bold mb-1">Edit Expense</h2>
+    <p class="text-secondary mb-4">Update this expense entry.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <input type="number" class="form-control" step="0.01" name="amount" value="{{ expense.amount }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category" required>
+                <option value="Food" {% if expense.category == 'Food' %}selected{% endif %}>Food</option>
+                <option value="Travel" {% if expense.category == 'Travel' %}selected{% endif %}>Travel</option>
+                <option value="Shopping" {% if expense.category == 'Shopping' %}selected{% endif %}>Shopping</option>
+                <option value="Bills" {% if expense.category == 'Bills' %}selected{% endif %}>Bills</option>
+                <option value="Other" {% if expense.category == 'Other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3">{{ expense.description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="date" value="{{ expense.date|date:'Y-m-d' }}" required>
+        </div>
+        <button type="submit" class="btn btn-expense w-100">Update Expense</button>
+    </form>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-link text-decoration-none px-0 mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

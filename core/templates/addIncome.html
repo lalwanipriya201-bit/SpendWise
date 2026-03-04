@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Income | SpendWise{% endblock %}
+
+{% block content %}
+<div class="app-card auth-card">
+    <h2 class="fw-bold mb-1">Add Income</h2>
+    <p class="text-secondary mb-4">Record a new earning entry.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <input type="number" class="form-control" name="amount" placeholder="0.00" step="0.01" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Source</label>
+            <input type="text" class="form-control" name="source" placeholder="Salary, freelance, etc." required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="date" required>
+        </div>
+        <button type="submit" class="btn btn-income w-100">Add Income</button>
+    </form>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-link text-decoration-none px-0 mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

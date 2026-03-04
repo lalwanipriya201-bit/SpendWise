@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Set Budget | SpendWise{% endblock %}
+
+{% block content %}
+<div class="app-card auth-card">
+    <h2 class="fw-bold mb-1">Set Monthly Budget</h2>
+    <p class="text-secondary mb-4">Define your monthly spending limit.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Budget Limit</label>
+            <input type="number" class="form-control" step="0.01" name="monthlyLimit" value="{{ budget.monthlyLimit }}"
+                placeholder="Enter monthly budget" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Save Budget</button>
+    </form>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-link text-decoration-none px-0 mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

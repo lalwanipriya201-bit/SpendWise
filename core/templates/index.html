@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}SpendWise | Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<section class="hero-section p-4 p-md-5 mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="badge badge-soft-blue mb-3">Classic Fintech Dashboard</span>
+            <h1 class="display-5 fw-bold text-main mb-3">Manage money with confidence and clarity</h1>
+            <p class="lead text-secondary mb-4">
+                Track income, monitor expenses, and stay within budget using one clean, focused finance workspace.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{% url 'login' %}" class="btn btn-primary px-4">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-outline-primary px-4">Create Account</a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="feature-panel">
+                <h4 class="fw-bold mb-3">What you get</h4>
+                <ul class="list-unstyled features-list mb-0">
+                    <li>Income and expense tracking</li>
+                    <li>Monthly budget and warning alerts</li>
+                    <li>Expense category pie charts</li>
+                    <li>Simple mobile-ready dashboard</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="row g-3">
+    <div class="col-md-6 col-xl-3">
+        <div class="app-card p-3 h-100">
+            <h6 class="text-main fw-bold">Income Overview</h6>
+            <p class="mb-0 text-secondary">Quickly monitor all money coming in from every source.</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="app-card p-3 h-100">
+            <h6 class="text-main fw-bold">Expense Control</h6>
+            <p class="mb-0 text-secondary">Keep spending organized by category and month.</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="app-card p-3 h-100">
+            <h6 class="text-main fw-bold">Budget Limit</h6>
+            <p class="mb-0 text-secondary">Set monthly targets and get warned before overspending.</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="app-card p-3 h-100">
+            <h6 class="text-main fw-bold">Visual Insights</h6>
+            <p class="mb-0 text-secondary">Understand where your money goes with visual charts.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

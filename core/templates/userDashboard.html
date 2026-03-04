@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | SpendWise{% endblock %}
+
+{% block content %}
+<div class="dashboard-header d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Welcome, {{ request.user.username }}</h2>
+        <p class="text-secondary mb-0">Track your financial health in one place.</p>
+    </div>
+    <form method="GET" class="filter-card">
+        <label for="month" class="form-label mb-1">Select Month</label>
+        <select id="month" name="month" class="form-select" onchange="this.form.submit()">
+            <option value="" {% if not selectedMonth %}selected{% endif %}>All Months</option>
+            <option value="1" {% if selectedMonth == '1' %}selected{% endif %}>January</option>
+            <option value="2" {% if selectedMonth == '2' %}selected{% endif %}>February</option>
+            <option value="3" {% if selectedMonth == '3' %}selected{% endif %}>March</option>
+            <option value="4" {% if selectedMonth == '4' %}selected{% endif %}>April</option>
+            <option value="5" {% if selectedMonth == '5' %}selected{% endif %}>May</option>
+            <option value="6" {% if selectedMonth == '6' %}selected{% endif %}>June</option>
+            <option value="7" {% if selectedMonth == '7' %}selected{% endif %}>July</option>
+            <option value="8" {% if selectedMonth == '8' %}selected{% endif %}>August</option>
+            <option value="9" {% if selectedMonth == '9' %}selected{% endif %}>September</option>
+            <option value="10" {% if selectedMonth == '10' %}selected{% endif %}>October</option>
+            <option value="11" {% if selectedMonth == '11' %}selected{% endif %}>November</option>
+            <option value="12" {% if selectedMonth == '12' %}selected{% endif %}>December</option>
+        </select>
+    </form>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card income">
+            <p class="metric-label">Total Income</p>
+            <p class="metric-value text-income">₹{{ totalIncome }}</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card expense">
+            <p class="metric-label">Total Expense</p>
+            <p class="metric-value text-expense">₹{{ totalExpense }}</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card balance">
+            <p class="metric-label">Current Balance</p>
+            <p class="metric-value">₹{{ balance }}</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="metric-card budget">
+            <p class="metric-label">Monthly Budget</p>
+            {% if budget %}
+            <p class="metric-value">₹{{ budget.monthlyLimit }}</p>
+            <small class="text-secondary">Remaining: ₹{{ remaining }}</small>
+            {% else %}
+            <p class="metric-value">Not Set</p>
+            <small class="text-secondary">Set a budget from the action button below.</small>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if warning %}
+<div class="alert alert-danger" role="alert">{{ warning }}</div>
+{% endif %}
+
+<div class="quick-actions d-flex flex-wrap gap-2 mb-4">
+    <a href="{% url 'addIncome' %}" class="btn btn-income">Add Income</a>
+    <a href="{% url 'addExpense' %}" class="btn btn-expense">Add Expense</a>
+    <a href="{% url 'setBudget' %}" class="btn btn-outline-primary">Set Budget</a>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-lg-6">
+        <div class="app-card dashboard-data-card h-100">
+            <div class="dashboard-card-header">
+                <h5 class="mb-0 fw-bold text-main">Recent Income</h5>
+            </div>
+            <div class="dashboard-card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Source</th>
+                                <th>Date</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for income in recentIncomes %}
+                            <tr>
+                                <td class="fw-semibold text-income">₹{{ income.amount }}</td>
+                                <td>{{ income.source }}</td>
+                                <td>{{ income.date }}</td>
+                                <td class="text-end">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'editIncome' income.id %}"
+                                            class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a href="{% url 'deleteIncome' income.id %}"
+                                            class="btn btn-sm btn-outline-danger">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-secondary">No income added yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="app-card dashboard-data-card h-100">
+            <div class="dashboard-card-header">
+                <h5 class="mb-0 fw-bold text-main">Recent Expense</h5>
+            </div>
+            <div class="dashboard-card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for expense in recentExpenses %}
+                            <tr>
+                                <td class="fw-semibold text-expense">₹{{ expense.amount }}</td>
+                                <td>{{ expense.category }}</td>
+                                <td>{{ expense.date }}</td>
+                                <td class="text-end">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'editExpense' expense.id %}"
+                                            class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a href="{% url 'deleteExpense' expense.id %}"
+                                            class="btn btn-sm btn-outline-danger">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-secondary">No expenses added yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-card p-3 p-md-4">
+    <h5 class="fw-bold text-main mb-3">Expense Breakdown</h5>
+    <div class="chart-wrapper">
+        <canvas id="expenseChart"></canvas>
+    </div>
+    <p id="chartEmptyText" class="text-secondary mt-3 mb-0 d-none">No expense data available for this selection.</p>
+</div>
+<a href="{% url 'download_pdf' %}">
+    Download PDF Report
+</a>
+{% endblock %}
+
+
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const categories = {{ categories| safe }};
+    const amounts = {{ amounts| safe }};
+    const chartCanvas = document.getElementById('expenseChart');
+    const emptyText = document.getElementById('chartEmptyText');
+
+    if (Array.isArray(categories) && categories.length > 0) {
+        const ctx = chartCanvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: categories,
+                datasets: [{
+                    data: amounts,
+                    backgroundColor: ['#1a5ea6', '#198754', '#dc3545', '#ffc107', '#5d6d7e'],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    } else {
+        chartCanvas.classList.add('d-none');
+        emptyText.classList.remove('d-none');
+    }
+</script>
+{% endblock %}

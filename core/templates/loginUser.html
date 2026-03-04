@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Login | SpendWise{% endblock %}
+
+{% block content %}
+<div class="app-card auth-card">
+    <h2 class="fw-bold mb-1">Welcome back</h2>
+    <p class="text-secondary mb-4">Login to continue managing your finances.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" placeholder="Enter username" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+
+    <p class="mb-0 mt-3 text-secondary">No account?
+        <a href="{% url 'register' %}" class="fw-semibold text-decoration-none">Create one</a>
+    </p>
+</div>
+{% endblock %}
